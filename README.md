@@ -39,14 +39,30 @@ To download the model weights and tokenizer:
 1. Visit the [Meta Llama website](https://llama.meta.com/llama-downloads/).
 2. Read and accept the license.
 3. Once your request is approved you will receive a signed URL via email.
-4. Install the [Llama CLI](https://github.com/meta-llama/llama-stack): `pip install llama-stack`. (**<-- Start Here if you have received an email already.**)
-5. Run `llama model list` to show the latest available models and determine the model ID you wish to download. **NOTE**:
-If you want older versions of models, run `llama model list --show-all` to show all the available Llama models.
+4. Install the Llama Models CLI: `pip install llama-models`. (**<-- Start Here if you have received an email already.**)
+5. Run `llama-model list` to show the latest available models and determine the model ID you wish to download. **NOTE**:
+If you want older versions of models, run `llama-model list --show-all` to show all the available Llama models.
 
-6. Run: `llama download --source meta --model-id CHOSEN_MODEL_ID`
+6. Run: `llama-model download --source meta --model-id CHOSEN_MODEL_ID`
 7. Pass the URL provided when prompted to start the download.
 
 Remember that the links expire after 24 hours and a certain amount of downloads. You can always re-request a link if you start seeing errors such as `403: Forbidden`.
+
+### CLI Commands Reference
+
+Once installed, the `llama-model` CLI provides the following commands:
+
+```bash
+llama-model list              # List available models
+llama-model list --show-all   # List all models (including older versions)
+llama-model describe -m MODEL_ID     # Show detailed information about a model
+llama-model download          # Download models from Meta or Hugging Face
+llama-model verify-download   # Verify integrity of downloaded models
+llama-model remove -m MODEL_ID       # Remove a downloaded model
+llama-model prompt-format -m MODEL_ID  # Show the prompt format for a model
+```
+
+For detailed help on any command, run `llama-model COMMAND --help`.
 
 ## Running the models
 
