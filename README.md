@@ -1,3 +1,7 @@
+butterfly effect by Kenneth Bingham
+
+By Kenneth Bingham with inspiration from the 1
+
 <p align="center">
   <img src="/Llama_Repo.jpeg" width="400"/>
 </p>
@@ -17,6 +21,14 @@ Llama is an accessible, open large language model (LLM) designed for developers,
 
 Our mission is to empower individuals and industry through this opportunity while fostering an environment of discovery and ethical AI advancements. The model weights are licensed for researchers and commercial entities, upholding the principles of openness.
 
+## Guiding Principles
+
+The development of this project is guided by the **[🦋 Butterfly Covenant](COVENANT.md)**, a philosophy that encodes principles of natural growth, structural integrity, and logical rigor into our work.
+
+This covenant is not just a document; it is the operational directive for how we build, balance, and verify our models. Its principles are directly embedded into our latest generation of models, as detailed in the **[Llama 4 Development Philosophy](models/llama4/MODEL_CARD.md#development-philosophy)**.
+
+---
+
 ## Llama Models
 
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/llama-models)](https://pypi.org/project/llama-models/)
@@ -30,7 +42,7 @@ Our mission is to empower individuals and industry through this opportunity whil
 | Llama 3.2 | 9/25/2024 | 1B, 3B | 128K | TikToken-based | [Use Policy](models/llama3_2/USE_POLICY.md) | [License](models/llama3_2/LICENSE) | [Model Card](models/llama3_2/MODEL_CARD.md) |
 | Llama 3.2-Vision | 9/25/2024 | 11B, 90B | 128K | TikToken-based | [Use Policy](models/llama3_2/USE_POLICY.md) | [License](models/llama3_2/LICENSE) | [Model Card](models/llama3_2/MODEL_CARD_VISION.md) |
 | Llama 3.3 | 12/04/2024 | 70B | 128K | TikToken-based | [Use Policy](models/llama3_3/USE_POLICY.md) | [License](models/llama3_3/LICENSE) | [Model Card](models/llama3_3/MODEL_CARD.md) |
-| Llama 4 | 4/5/2025 | Scout-17B-16E, Maverick-17B-128E | 10M, 1M | TikToken-based | [Use Policy](models/llama4/USE_POLICY.md) | [License](models/llama4/LICENSE) | [Model Card](models/llama4/MODEL_CARD.md) |
+| Llama 4 | 4/5/2025 | Scout-17B-16E, Maverick-17B-128E | 10M, 1M | [Llama 4 Tokenizer](models/llama4/prompt_format.md) | [Use Policy](models/llama4/USE_POLICY.md) | [License](models/llama4/LICENSE) | [Model Card](models/llama4/MODEL_CARD.md) |
 
 ## Download
 
@@ -50,19 +62,18 @@ Remember that the links expire after 24 hours and a certain amount of downloads.
 
 ### CLI Commands Reference
 
-Once installed, the `llama-model` CLI provides the following commands:
+Once installed, the `llama-model` CLI provides the following commands. For detailed help on any command, run `llama-model COMMAND --help`.
 
-```bash
-llama-model list              # List available models
-llama-model list --show-all   # List all models (including older versions)
-llama-model describe -m MODEL_ID     # Show detailed information about a model
-llama-model download          # Download models from Meta or Hugging Face
-llama-model verify-download   # Verify integrity of downloaded models
-llama-model remove -m MODEL_ID       # Remove a downloaded model
-llama-model prompt-format -m MODEL_ID  # Show the prompt format for a model
-```
+| Command | Description |
+| :--- | :--- |
+| `llama-model list` | List the latest available models. |
+| `llama-model list --show-all` | List all models, including older versions. |
+| `llama-model describe -m MODEL_ID` | Show detailed information about a specific model. |
+| `llama-model download` | Download models from Meta or Hugging Face. |
+| `llama-model verify-download` | Verify the integrity of downloaded model files. |
+| `llama-model remove -m MODEL_ID` | Remove a downloaded model. |
+| `llama-model prompt-format -m MODEL_ID` | Display the correct prompt format for a model. |
 
-For detailed help on any command, run `llama-model COMMAND --help`.
 
 ## Running the models
 
@@ -77,13 +88,18 @@ Example scripts are available in `models/{ llama3, llama4 }/scripts/` sub-direct
 
 ```bash
 #!/bin/bash
+# Set sensible defaults, but allow user overrides
+NGPUS=${NGPUS:-4}
+MODEL_ID=${MODEL_ID:-"Llama-4-Scout-17B-16E-Instruct"}
+CHECKPOINT_DIR=${CHECKPOINT_DIR:-"$HOME/.llama/checkpoints/${MODEL_ID}"}
 
-NGPUS=4
-CHECKPOINT_DIR=~/.llama/checkpoints/Llama-4-Scout-17B-16E-Instruct
 PYTHONPATH=$(git rev-parse --show-toplevel) \
   torchrun --nproc_per_node=$NGPUS \
   -m models.llama4.scripts.chat_completion $CHECKPOINT_DIR \
   --world_size $NGPUS
+
+# To run, you can now simply execute the script or customize it:
+# MODEL_ID=Llama-4-Maverick-17B-128E ./run_chat.sh
 ```
 
 The above script should be used with an Instruct (Chat) model. For a Base model, update the `CHECKPOINT_DIR` path and use the script `models.llama4.scripts.completion`.
@@ -92,24 +108,26 @@ The above script should be used with an Instruct (Chat) model. For a Base model,
 ## Running inference with FP8 and Int4 Quantization
 
 You can reduce the memory footprint of the models at the cost of minimal loss in accuracy by running inference with FP8 or Int4 quantization. Use the `--quantization-mode` flag to specify the quantization mode. There are two modes:
-- `fp8_mixed`: Mixed precision inference with FP8 for some weights and bfloat16 for activations.
-- `int4_mixed`: Mixed precision inference with Int4 for some weights and bfloat16 for activations.
+- `fp8_mixed`: Mixed precision with FP8 weights. Requires 2 GPUs for Scout.
+- `int4_mixed`: Mixed precision with Int4 weights. Requires 1 GPU for Scout.
 
 Using FP8, running Llama-4-Scout-17B-16E-Instruct requires 2 GPUs with 80GB of memory. Using Int4, you need a single GPU with 80GB of memory.
 
 ```bash
-MODE=fp8_mixed  # or int4_mixed
-if [ $MODE == "fp8_mixed" ]; then
-  NGPUS=2
-else
-  NGPUS=1
-fi
-CHECKPOINT_DIR=~/.llama/checkpoints/Llama-4-Scout-17B-16E-Instruct
+# Set defaults for quantization. The user can override these.
+QUANTIZATION_MODE=${QUANTIZATION_MODE:-"fp8_mixed"}
+MODEL_ID=${MODEL_ID:-"Llama-4-Scout-17B-16E-Instruct"}
+CHECKPOINT_DIR=${CHECKPOINT_DIR:-"$HOME/.llama/checkpoints/${MODEL_ID}"}
+NGPUS=${NGPUS:-2} # Default for fp8_mixed
+
+# Adjust NGPUS for int4_mixed if not overridden
+[[ "$QUANTIZATION_MODE" == "int4_mixed" && "$NGPUS" == "2" ]] && NGPUS=1
+
 PYTHONPATH=$(git rev-parse --show-toplevel) \
   torchrun --nproc_per_node=$NGPUS \
   -m models.llama4.scripts.chat_completion $CHECKPOINT_DIR \
   --world_size $NGPUS \
-  --quantization-mode $MODE
+  --quantization-mode $QUANTIZATION_MODE
 ```
 
 

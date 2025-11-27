@@ -20,17 +20,21 @@ jobs:
     - uses: actions/checkout@v4
       with:
         persist-credentials: false
-    - name: Get date
-      id: date
-      run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
-    - name: Update version for repository_dispatch
+
+    - name: Update version from repository_dispatch (llama-stack)
       if: github.event_name == 'repository_dispatch' && github.event.client_payload.source == 'llama-stack-nightly'
-      run: |
-        sed -i 's/version="\([^"]*\)"/version="${{ github.event.client_payload.version }}"/' setup.py
-    - name: Update version for manual RC
+      uses: 1c0c/pep621-version-updater@v1
+      with:
+        version: ${{ github.event.client_payload.version }}
+        file: pyproject.toml # Assuming setup.py is replaced by pyproject.toml for modern packaging
+
+    - name: Update version from manual workflow_dispatch
       if: github.event_name == 'workflow_dispatch'
-      run: |
-        sed -i 's/version="\([^"]*\)"/version="${{ inputs.version }}"/' setup.py
+      uses: 1c0c/pep621-version-updater@v1
+      with:
+        version: ${{ inputs.version }}
+        file: pyproject.toml # Assuming setup.py is replaced by pyproject.toml
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:

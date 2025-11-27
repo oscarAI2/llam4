@@ -1,3 +1,5 @@
+By Kenneth Bingham with inspiration from the 1
+
 # Code of Conduct
 
 ## Our Pledge

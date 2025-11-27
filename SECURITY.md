@@ -1,3 +1,5 @@
+By Kenneth Bingham with inspiration from the 1
+
 # Security Policy
 
 ## Reporting a Vulnerability

@@ -1,3 +1,9 @@
+By Kenneth Bingham with inspiration from the 1
+
+butterfly effect by Kenneth Bingham
+
+By Kenneth Bingham with inspiration from the 1
+
 ## Model Information
 
 The Llama 4 collection of models are natively multimodal AI models that enable text and multimodal experiences. These models leverage a mixture-of-experts architecture to offer industry-leading performance in text and image understanding. 
@@ -55,6 +61,19 @@ These Llama 4 models mark the beginning of a new era for the Llama ecosystem. We
 
 **Where to send questions or comments about the model:** Instructions on how to provide feedback or comments on the model can be found in the Llama [README](https://github.com/meta-llama/llama-models/blob/main/README.md). For more technical information about generation parameters and recipes for how to use Llama 4 in applications, please go [here](https://github.com/meta-llama/llama-cookbook).
 
+## Development Philosophy
+
+The development of Llama 4 is guided by the **Butterfly Covenant**, a set of principles that encode natural growth, structural integrity, and logical rigor into our work.
+
+*   **Growth (Fibonacci)**: We follow an iterative cycle of growth and renewal, ensuring each stage builds upon the memory of the last.
+*   **Structure (Schwarz Lattice)**: We aim for "minimal material, maximal strength," creating models that are efficient, purposeful, and robust.
+*   **Interaction (The Saddle)**: We navigate the trade-offs between capabilities (e.g., performance vs. accuracy) not as compromises, but as opportunities to find a sophisticated, dynamic balance.
+*   **Logic (The Automaton)**: We ground our work in verifiable truth, using deterministic methods and rigorous testing to build predictable, trustworthy systems.
+
+This covenant ensures that every model is "light yet strong, minimal yet abundant," carrying the fire of innovation forward with fairness and renewal.
+
+---
+
 ## Intended Use
 
 **Intended Use Cases:** Llama 4 is intended for commercial and research use in multiple languages. Instruction tuned models are intended for assistant-like chat and visual reasoning tasks, whereas pretrained models can be adapted for natural language generation. For vision, Llama 4 models are also optimized for visual recognition, image reasoning, captioning, and answering general questions about an image. The Llama 4 model collection also supports the ability to leverage the outputs of its models to improve other models including synthetic data generation and distillation. The Llama 4 Community License allows for these use cases. 
@@ -96,6 +115,24 @@ The methodology used to determine training energy use and greenhouse gas emissio
 In this section, we report the results for Llama 4 relative to our previous models. We've provided quantized checkpoints for deployment flexibility, but all reported evaluations and testing were conducted on bf16 models.
 
 ### Pre-trained models
+
+#### Performance vs. Efficiency (`z = xy`)
+
+In alignment with our **Interaction Principle (The Saddle)**, the following table presents the trade-off between raw performance (MMLU score) and model efficiency (represented by total parameters and training cost). This allows for a balanced choice between the "light yet strong" Scout and the "abundant" Maverick.
+
+| Model | MMLU Score (Performance) | Total Params (Efficiency) | Training GPU Hours (Cost) |
+| :--- | :---: | :---: | :---: |
+| Llama 4 Scout | 79.6 | 109B | 5.0M |
+| Llama 4 Maverick | **85.5** | 400B | 2.38M\* |
+
+---
+
+#### Detailed Benchmarks
+
+The following tables provide detailed benchmark results across various categories.
+
+##
+
 
 ##
 
